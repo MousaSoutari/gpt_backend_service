@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPT Backend Service Documentation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #333;
+      }
+      pre {
+        background-color: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+      code {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #f4f4f4;
+        padding: 2px 5px;
+        border-radius: 3px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #2c3e50;
+      }
+      .project-structure {
+        font-family: 'Courier New', Courier, monospace;
+        white-space: pre;
+        background-color: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        line-height: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>GPT Backend Service Documentation</h1>
+
+    <h2>Project Overview</h2>
+    <p>This project is a basic backend service that demonstrates:</p>
+    <ul>
+      <li>Reading data from filesystem and database</li>
+      <li>Generating RAG (Retrieval-Augmented Generation) files</li>
+      <li>Simulating cloud storage operations</li>
+      <li>Unit testing</li>
+      <li>CI/CD pipeline integration with Jenkins</li>
+    </ul>
+
+    <h2>Project Structure</h2>
+    <div class="project-structure">
+      .<br />
+      ├── Jenkinsfile<br />
+      ├── README.html<br />
+      ├── backend_service.py<br />
+      ├── cloud<br />
+      ├── data<br />
+      │ ├── file1.txt<br />
+      │ └── file2.txt<br />
+      ├── database.db<br />
+      ├── output<br />
+      ├── requirements.txt<br />
+      └── test_backend_service.py<br />
+      └── venv<br />
+    </div>
+
+    <h2>Setup Instructions</h2>
+
+    <h3>1. Environment Setup</h3>
+    <pre><code># Clone the repository
+git clone &lt;repository-url&gt;
+cd gpt_backend_service
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # On Linux/Mac
+# or
+.\venv\Scripts\activate  # On Windows
+
+# Install dependencies
+./venv/bin/pip install -r requirements.txt</code></pre>
+
+    <h3>2. Create Required Directories</h3>
+    <pre><code>mkdir -p data output cloud test_data test_output</code></pre>
+
+    <h3>3. Create Test Data</h3>
+    <pre><code># Create sample files
+echo "Test content 1" > data/file1.txt
+echo "Test content 2" > data/file2.txt
+
+# Create test database
+./venv/bin/python</code></pre>
+
+    <pre><code>import sqlite3
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS data 
+                 (id INTEGER PRIMARY KEY, content TEXT)''')
+cursor.execute("INSERT INTO data (content) VALUES ('Database content 1')")
+cursor.execute("INSERT INTO data (content) VALUES ('Database content 2')")
+conn.commit()
+conn.close()
+exit()</code></pre>
+
+    <h2>Running Tests</h2>
+
+    <h3>Run Unit Tests</h3>
+    <pre><code># Run all tests with verbose output
+./venv/bin/python -m pytest test_backend_service.py -v
+
+# Run tests with coverage report
+./venv/bin/python -m pytest --cov=backend_service test_backend_service.py</code></pre>
+
+    <h3>Run Main Application</h3>
+    <pre><code>./venv/bin/python backend_service.py</code></pre>
+
+    <h2>CI/CD Pipeline</h2>
+
+    <h3>Jenkins Pipeline Setup</h3>
+    <ol>
+      <li>Ensure Jenkins is installed on your Linux server</li>
+      <li>
+        Install required Jenkins plugins:
+        <ul>
+          <li>Python Plugin</li>
+          <li>Pipeline Plugin</li>
+          <li>Git Plugin</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>Pipeline Stages</h3>
+    <p>The Jenkinsfile defines three main stages:</p>
+    <ol>
+      <li>
+        <strong>Build</strong>: Sets up Python environment and installs
+        dependencies
+      </li>
+      <li><strong>Test</strong>: Runs unit tests</li>
+      <li><strong>Deploy</strong>: Handles deployment (customize as needed)</li>
+    </ol>
+
+    <h2>API Functions</h2>
+
+    <h3>backend_service.py</h3>
+    <ul>
+      <li>
+        <code>pull_data_from_filesystem(source_path)</code>: Reads data from
+        files in specified directory
+      </li>
+      <li>
+        <code>pull_data_from_database(db_path)</code>: Retrieves data from
+        SQLite database
+      </li>
+      <li>
+        <code>generate_rag_files(data, output_path)</code>: Creates RAG files
+        from input data
+      </li>
+      <li>
+        <code>send_to_cloud(output_path, cloud_path)</code>: Simulates cloud
+        storage transfer
+      </li>
+    </ul>
+
+    <h2>Common Issues and Solutions</h2>
+
+    <h3>1. Permission Issues</h3>
+    <pre><code># Fix directory permissions
+chmod 755 data output cloud test_data test_output</code></pre>
+
+    <h3>2. Database Connection Issues</h3>
+    <pre><code># Verify database
+sqlite3 database.db
+.tables
+SELECT * FROM data;
+.quit</code></pre>
+
+    <h3>3. Python Version Conflicts</h3>
+    <pre><code># Verify Python version
+./venv/bin/python --version
+
+# Should be Python 3.6 or higher</code></pre>
+
+    <h2>Maintenance</h2>
+
+    <h3>Updating Dependencies</h3>
+    <pre><code>./venv/bin/pip freeze > requirements.txt</code></pre>
+
+    <h3>Cleaning Up</h3>
+    <pre><code># Remove generated files
+rm -rf output/* cloud/*
+rm database.db</code></pre>
+
+    <h2>Contributing</h2>
+    <ol>
+      <li>Fork the repository</li>
+      <li>Create a feature branch</li>
+      <li>Make changes and add tests</li>
+      <li>Run all tests</li>
+      <li>Submit pull request</li>
+    </ol>
+
+    <h2>Contact</h2>
+    <p>
+      For questions or issues, please create an issue in the repository or
+      contact the maintainer.
+    </p>
+
+    <hr />
+    <p>
+      <em
+        >This documentation provides a basic overview of the project setup and
+        usage. Adjust paths, commands, and configurations according to your
+        specific environment and requirements.</em
+      >
+    </p>
+  </body>
+</html>
